@@ -10,6 +10,7 @@ private:
     int bookID;
     string title;
     string author;
+    string status;
 
 public:
 
@@ -28,7 +29,12 @@ public:
         cout << "Enter Author Name: ";
         getline(cin, author);
 
-        file << bookID << "|" << title << "|" << author << endl;
+        status = "Available";
+
+        file << bookID << "|"
+             << title << "|"
+             << author << "|"
+             << status << endl;
 
         file.close();
 
@@ -39,13 +45,20 @@ public:
     {
         ifstream file("books.txt");
 
-        string line;
-
         cout << "\n----- Book Records -----\n";
 
-        while(getline(file, line))
+        while(file >> bookID)
         {
-            cout << line << endl;
+            file.ignore();
+
+            getline(file, title, '|');
+            getline(file, author, '|');
+            getline(file, status);
+
+            cout << "\nBook ID: " << bookID << endl;
+            cout << "Title: " << title << endl;
+            cout << "Author: " << author << endl;
+            cout << "Status: " << status << endl;
         }
 
         file.close();
@@ -67,7 +80,8 @@ public:
             file.ignore();
 
             getline(file, title, '|');
-            getline(file, author);
+            getline(file, author, '|');
+            getline(file, status);
 
             if(bookID == searchID)
             {
@@ -76,6 +90,7 @@ public:
                 cout << "Book ID: " << bookID << endl;
                 cout << "Title: " << title << endl;
                 cout << "Author: " << author << endl;
+                cout << "Status: " << status << endl;
 
                 found = true;
             }
@@ -107,7 +122,8 @@ public:
             file.ignore();
 
             getline(file, title, '|');
-            getline(file, author);
+            getline(file, author, '|');
+            getline(file, status);
 
             if(bookID == deleteID)
             {
@@ -118,7 +134,8 @@ public:
 
             tempFile << bookID << "|"
                      << title << "|"
-                     << author << endl;
+                     << author << "|"
+                     << status << endl;
         }
 
         file.close();
@@ -157,7 +174,8 @@ public:
             file.ignore();
 
             getline(file, title, '|');
-            getline(file, author);
+            getline(file, author, '|');
+            getline(file, status);
 
             if(bookID == updateID)
             {
@@ -172,7 +190,8 @@ public:
 
             tempFile << bookID << "|"
                      << title << "|"
-                     << author << endl;
+                     << author << "|"
+                     << status << endl;
         }
 
         file.close();
@@ -186,6 +205,116 @@ public:
             cout << "\nBook Updated Successfully!\n";
         }
         else
+        {
+            cout << "\nBook Not Found!\n";
+        }
+    }
+
+    void issueBook()
+    {
+        ifstream file("books.txt");
+
+        ofstream tempFile("temp.txt");
+
+        int issueID;
+
+        bool found = false;
+
+        cout << "\nEnter Book ID to Issue: ";
+        cin >> issueID;
+
+        while(file >> bookID)
+        {
+            file.ignore();
+
+            getline(file, title, '|');
+            getline(file, author, '|');
+            getline(file, status);
+
+            if(bookID == issueID)
+            {
+                found = true;
+
+                if(status == "Issued")
+                {
+                    cout << "\nBook Already Issued!\n";
+                }
+                else
+                {
+                    status = "Issued";
+
+                    cout << "\nBook Issued Successfully!\n";
+                }
+            }
+
+            tempFile << bookID << "|"
+                     << title << "|"
+                     << author << "|"
+                     << status << endl;
+        }
+
+        file.close();
+        tempFile.close();
+
+        remove("books.txt");
+        rename("temp.txt", "books.txt");
+
+        if(found == false)
+        {
+            cout << "\nBook Not Found!\n";
+        }
+    }
+
+    void returnBook()
+    {
+        ifstream file("books.txt");
+
+        ofstream tempFile("temp.txt");
+
+        int returnID;
+
+        bool found = false;
+
+        cout << "\nEnter Book ID to Return: ";
+        cin >> returnID;
+
+        while(file >> bookID)
+        {
+            file.ignore();
+
+            getline(file, title, '|');
+            getline(file, author, '|');
+            getline(file, status);
+
+            if(bookID == returnID)
+            {
+                found = true;
+
+                if(status == "Available")
+                {
+                    cout << "\nBook Already Available!\n";
+                }
+                else
+                {
+                    status = "Available";
+
+                    cout << "\nBook Returned Successfully!\n";
+                }
+            }
+
+            tempFile << bookID << "|"
+                     << title << "|"
+                     << author << "|"
+                     << status << endl;
+        }
+
+        file.close();
+        tempFile.close();
+
+        remove("books.txt");
+        rename("temp.txt", "books.txt");
+
+        if(found == false)
         {
             cout << "\nBook Not Found!\n";
         }
@@ -207,7 +336,9 @@ int main()
         cout << "3. Search Book\n";
         cout << "4. Delete Book\n";
         cout << "5. Update Book\n";
-        cout << "6. Exit\n";
+        cout << "6. Issue Book\n";
+        cout << "7. Return Book\n";
+        cout << "8. Exit\n";
 
         cout << "Enter Choice: ";
         cin >> choice;
@@ -235,6 +366,14 @@ int main()
                 break;
 
             case 6:
+                b.issueBook();
+                break;
+
+            case 7:
+                b.returnBook();
+                break;
+
+            case 8:
                 cout << "\nExiting Program...\n";
                 break;
 
@@ -242,7 +381,7 @@ int main()
                 cout << "\nInvalid Choice!\n";
         }
 
-    } while(choice != 6);
+    } while(choice != 8);
 
     return 0;
 }
