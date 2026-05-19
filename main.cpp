@@ -136,6 +136,60 @@ public:
             cout << "\nBook Not Found!\n";
         }
     }
+
+    void updateBook()
+    {
+        ifstream file("books.txt");
+
+        ofstream tempFile("temp.txt");
+
+        int updateID;
+
+        bool found = false;
+
+        cout << "\nEnter Book ID to Update: ";
+        cin >> updateID;
+
+        cin.ignore();
+
+        while(file >> bookID)
+        {
+            file.ignore();
+
+            getline(file, title, '|');
+            getline(file, author);
+
+            if(bookID == updateID)
+            {
+                found = true;
+
+                cout << "\nEnter New Book Title: ";
+                getline(cin, title);
+
+                cout << "Enter New Author Name: ";
+                getline(cin, author);
+            }
+
+            tempFile << bookID << "|"
+                     << title << "|"
+                     << author << endl;
+        }
+
+        file.close();
+        tempFile.close();
+
+        remove("books.txt");
+        rename("temp.txt", "books.txt");
+
+        if(found)
+        {
+            cout << "\nBook Updated Successfully!\n";
+        }
+        else
+        {
+            cout << "\nBook Not Found!\n";
+        }
+    }
 };
 
 int main()
@@ -152,7 +206,8 @@ int main()
         cout << "2. Display Books\n";
         cout << "3. Search Book\n";
         cout << "4. Delete Book\n";
-        cout << "5. Exit\n";
+        cout << "5. Update Book\n";
+        cout << "6. Exit\n";
 
         cout << "Enter Choice: ";
         cin >> choice;
@@ -176,6 +231,10 @@ int main()
                 break;
 
             case 5:
+                b.updateBook();
+                break;
+
+            case 6:
                 cout << "\nExiting Program...\n";
                 break;
 
@@ -183,7 +242,7 @@ int main()
                 cout << "\nInvalid Choice!\n";
         }
 
-    } while(choice != 5);
+    } while(choice != 6);
 
     return 0;
 }
