@@ -1,3 +1,1 @@
-101 Harry potter J.K. Rowling
-102 Atomic habits James Clear
-103 Wings of fire A.P.J Abdul Kalam
+101|Harry potter|Jk rowling

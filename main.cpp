@@ -12,6 +12,7 @@ private:
     string author;
 
 public:
+
     void addBook()
     {
         ofstream file("books.txt", ios::app);
@@ -27,9 +28,7 @@ public:
         cout << "Enter Author Name: ";
         getline(cin, author);
 
-        file << bookID << " "
-             << title << " "
-             << author << endl;
+        file << bookID << "|" << title << "|" << author << endl;
 
         file.close();
 
@@ -51,6 +50,44 @@ public:
 
         file.close();
     }
+
+    void searchBook()
+    {
+        ifstream file("books.txt");
+
+        int searchID;
+
+        bool found = false;
+
+        cout << "\nEnter Book ID to Search: ";
+        cin >> searchID;
+
+        while(file >> bookID)
+        {
+            file.ignore();
+
+            getline(file, title, '|');
+            getline(file, author);
+
+            if(bookID == searchID)
+            {
+                cout << "\nBook Found!\n";
+
+                cout << "Book ID: " << bookID << endl;
+                cout << "Title: " << title << endl;
+                cout << "Author: " << author << endl;
+
+                found = true;
+            }
+        }
+
+        if(found == false)
+        {
+            cout << "\nBook Not Found!\n";
+        }
+
+        file.close();
+    }
 };
 
 int main()
@@ -65,7 +102,8 @@ int main()
 
         cout << "1. Add Book\n";
         cout << "2. Display Books\n";
-        cout << "3. Exit\n";
+        cout << "3. Search Book\n";
+        cout << "4. Exit\n";
 
         cout << "Enter Choice: ";
         cin >> choice;
@@ -81,6 +119,10 @@ int main()
                 break;
 
             case 3:
+                b.searchBook();
+                break;
+
+            case 4:
                 cout << "\nExiting Program...\n";
                 break;
 
@@ -88,7 +130,7 @@ int main()
                 cout << "\nInvalid Choice!\n";
         }
 
-    } while(choice != 3);
+    } while(choice != 4);
 
     return 0;
-}
+}git add .
