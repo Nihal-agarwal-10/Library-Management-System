@@ -27,10 +27,10 @@ Library-Management-System/
 ## Screenshots
 
 ### Add Book
-![Add Book](screenshots/add-book.png)
+![Add Book](Screenshots/add-book.png)
 
 ### Display Books
-![Display Books](screenshots/display-books.png)
+![Display Books](Screenshots/display-books.png)
 
 ## How to Run
 
